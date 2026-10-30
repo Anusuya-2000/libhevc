@@ -331,3 +331,9 @@ cc_benchmark {
     defaults: ["libhevc_benchmarks_defaults"],
     srcs: ["ihevc_weighted_pred_benchmark.cc"],
 }
+
+cc_benchmark {
+    name: "ihevc_hbd_weighted_pred_benchmark",
+    defaults: ["libhevc_benchmarks_defaults"],
+    srcs: ["ihevc_hbd_weighted_pred_benchmark.cc"],
+}

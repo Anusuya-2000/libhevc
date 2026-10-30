@@ -206,4 +206,9 @@ if(ENABLE_BENCHMARKS)
     ihevc_weighted_pred_benchmark
     SOURCES ${HEVC_ROOT}/tests/common/ihevc_weighted_pred_benchmark.cc
   )
+
+  libhevc_add_benchmark_executable(
+    ihevc_hbd_weighted_pred_benchmark
+    SOURCES ${HEVC_ROOT}/tests/common/ihevc_hbd_weighted_pred_benchmark.cc
+  )
 endif()
