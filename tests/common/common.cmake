@@ -10,6 +10,7 @@ add_library(libhevc_dsp_test_utils STATIC
 target_include_directories(libhevc_dsp_test_utils PUBLIC
   ${HEVC_ROOT}/tests/common
   ${HEVC_ROOT}/common
+  ${HEVC_ROOT}/decoder
 )
 target_link_libraries(libhevc_dsp_test_utils PUBLIC libhevcdec)
 
@@ -205,5 +206,10 @@ if(ENABLE_BENCHMARKS)
   libhevc_add_benchmark_executable(
     ihevc_weighted_pred_benchmark
     SOURCES ${HEVC_ROOT}/tests/common/ihevc_weighted_pred_benchmark.cc
+  )
+
+  libhevc_add_benchmark_executable(
+    ihevc_fmt_conv_benchmark
+    SOURCES ${HEVC_ROOT}/tests/common/ihevc_fmt_conv_benchmark.cc
   )
 endif()

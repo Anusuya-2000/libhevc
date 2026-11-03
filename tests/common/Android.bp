@@ -331,3 +331,16 @@ cc_benchmark {
     defaults: ["libhevc_benchmarks_defaults"],
     srcs: ["ihevc_weighted_pred_benchmark.cc"],
 }
+
+cc_benchmark {
+    name: "ihevc_fmt_conv_benchmark",
+    defaults: ["libhevc_tests_defaults"],
+    srcs: [
+        "BenchmarkCommon.cc",
+        "ihevc_fmt_conv_benchmark.cc",
+    ],
+    static_libs: [
+        "libhevc_tests_common",
+        "libhevcdec",
+    ],
+}
