@@ -220,14 +220,16 @@ void ihevcd_proc_map_update(process_ctxt_t *ps_proc, proc_type_t proc_type, WORD
 void ihevcd_slice_hdr_update(process_ctxt_t *ps_proc)
 {
 
-    /* Slice x and y are initialized in proc_init. But initialize slice x and y count here
-     *  if a new slice begins at the middle of a row since proc_init is invoked only at the beginning of each row */
-    if(!((ps_proc->i4_ctb_x == 0) && (ps_proc->i4_ctb_y == 0)))
+    /* The slice header and slice X/Y are already initialized at the beginning of each tile row (i4_ctb_tile_x == 0)
+     * in ihevcd_init_proc_ctxt(). Therefore, skip the first CTB of each row.
+     * For slices starting in the middle of a row, initialize the slice X and Y count here, since ihevcd_init_proc_ctxt() is invoked only at the beginning of each row.*/
+    if(0 != ps_proc->i4_ctb_tile_x)
     {
         slice_header_t *ps_slice_hdr_next = ps_proc->ps_codec->ps_slice_hdr_base + ((ps_proc->i4_cur_slice_idx + 1) & (MAX_SLICE_HDR_CNT - 1));
 
-        if((ps_slice_hdr_next->i2_ctb_x == ps_proc->i4_ctb_x)
-                        && (ps_slice_hdr_next->i2_ctb_y == ps_proc->i4_ctb_y))
+        WORD32 cur_ctb_idx = ps_proc->i4_ctb_x + ps_proc->i4_ctb_y * ps_proc->ps_sps->i2_pic_wd_in_ctb;
+        if((ps_proc->ps_codec->pu1_parse_map[cur_ctb_idx] & 2) && 
+                    ((ps_slice_hdr_next->i2_ctb_x == ps_proc->i4_ctb_x) && (ps_slice_hdr_next->i2_ctb_y == ps_proc->i4_ctb_y)))
         {
             if(0 == ps_slice_hdr_next->i1_dependent_slice_flag)
             {

@@ -3669,10 +3669,16 @@ IHEVCD_ERROR_T ihevcd_parse_slice_data(codec_t *ps_codec)
             sps_t *ps_sps = ps_codec->s_parse.ps_sps;
             UWORD8 *pu1_buf;
             WORD32 idx;
+            UWORD8 u1_parse_status = 1;
+            if((ps_codec->s_parse.i4_ctb_x == ps_slice_hdr->i2_ctb_x) &&
+               (ps_codec->s_parse.i4_ctb_y == ps_slice_hdr->i2_ctb_y))
+            {
+                u1_parse_status |= 2;
+            }
             idx = (ps_codec->s_parse.i4_ctb_x);
             idx += ((ps_codec->s_parse.i4_ctb_y) * ps_sps->i2_pic_wd_in_ctb);
             pu1_buf = (ps_codec->pu1_parse_map + idx);
-            *pu1_buf = 1;
+            *pu1_buf = u1_parse_status;
         }
 
         /* Increment CTB x and y positions */
@@ -3839,7 +3845,7 @@ IHEVCD_ERROR_T ihevcd_parse_slice_data(codec_t *ps_codec)
 
                     while(ctb_indx != ps_sps->i4_pic_size_in_ctb)
                     {
-                        WORD32 parse_status = *(ps_codec->pu1_parse_map + ctb_indx);
+                        WORD32 parse_status = (*(ps_codec->pu1_parse_map + ctb_indx) != 0);
                         volatile WORD32 proc_status = *(ps_codec->pu1_proc_map + ctb_indx) & 1;
 
                         if(parse_status == proc_status)
